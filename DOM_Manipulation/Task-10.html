@@ -1,0 +1,63 @@
+<!-- Booking appointment App -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dom Local Storage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body class="p-5 bg-secondary">
+    <div class="row" style="color:yellow">
+        <div class="mx-auto col-10 col-md-8 col-lg-6">
+            <!-- Form -->
+            <form class="form-example" action="" method="post" onsubmit="saveToLocalStorage(event)">
+                <h1 style="color:rgb(255, 223, 80)"><u>Contact Us...</u></h1>
+                <p class="description" style="color: rgb(80, 255, 98);">For booking the appointment fill the below form.
+                </p>
+                <!-- Input fields -->
+                <div class="col-md-8">
+                    <label for="name" class="form-label">Name:</label>
+                    <input style="background-color: aqua;" type="text" class="form-control" id="name" name="name"
+                        placeholder="Enter Your full name" required>
+                    <br>
+
+                    <label for="email" class="form-label">Mail Id:</label>
+                    <input style="background-color: aqua;" type="email" class="form-control" id="email" name="email"
+                        placeholder="Enter your mail-id" required>
+                    <br>
+
+                    <label for="phonenumber" class="form-label">Mobile Number:</label>
+                    <div class="input-group has-validation">
+                        <span style="background-color: aqua;" class="input-group-text" id="phonenumber">+91</span>
+                        <input style="background-color: aqua;" type="tel" pattern="[0-9]{10}" class="form-control"
+                            id="phonenumber" name="phonenumber" placeholder="Enter Mobile Number" required>
+                    </div>
+                    <br>
+                    <div class="col-6">
+                        <button class="btn btn-primary" type="submit">Submit-></button>
+                    </div>
+                </div>
+            </form>
+            <!-- Form end -->
+        </div>
+    </div>
+    <script>
+        function saveToLocalStorage(event) {
+            event.preventDefault();
+            const name = event.target.name.value;
+            const email = event.target.email.value;
+            const phonenumber = event.target.phonenumber.value;
+
+            localStorage.setItem('Name', name);
+            localStorage.setItem('Email', email);
+            localStorage.setItem('PhoneNumber', phonenumber);
+        }
+    </script>
+</body>
+
+</html>

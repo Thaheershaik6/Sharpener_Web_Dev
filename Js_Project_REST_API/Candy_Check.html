@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Shop check</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body style="background-color: rgb(222, 216, 135);">
+    <form class="row row-cols-lg-auto g-3 ms-lg-4 mt-lg-3" onsubmit="saveOnCurdCurd(event)">
+        <div class="col">
+            <label for="Candy_Name">Candy Name</label> <input type="text" class="form-control" id="Candy_Name"
+                placeholder="Candy Name">
+        </div>
+
+        <div class="col">
+            <label for="Description">Description</label>
+            <input type="text" class="form-control" id="Description" placeholder="Description">
+        </div>
+
+        <div class="col">
+            <label for="Prise">Prise</label>
+            <input type="text" class="form-control" id="Prise" placeholder="Prise">
+        </div>
+
+        <div class="col">
+            <label for="Quantity">Quantity</label>
+            <input type="text" class="form-control" id="Quantity" placeholder="Quantity">
+        </div>
+
+        <div class="col" style="margin-top: 40px;">
+            <button type="submit" class="btn btn-primary">Add Item</button>
+        </div>
+    </form>
+    <br>
+    <ol id="list" class="ms-lg-4"></ol>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+    <script>
+        function saveOnCurdCurd(event) {
+            event.preventDefault();
+            const Candy_name = document.getElementById('Candy_Name').value;
+            const Description = document.getElementById('Description').value;
+            const Prise = document.getElementById('Prise').value;
+            const Quantity = document.getElementById('Quantity').value;
+
+            const Order = { Candy_name, Description, Prise, Quantity }
+
+            axios.post('https://crudcrud.com/api/e16bed95401c43c9a3136c1736acc89a/CandysOrderData', Order)
+                .then(response => {
+                    showOrderDataOnScreen(response.data)
+                })
+                .catch((error) => {
+                    document.body.innerHTML = document.body.innerHTML + `<h3> Something went wrong...! </h3>`
+                    console.log(error)
+                })
+        }
+
+        function showOrderDataOnScreen(Order) {
+            const parentList = document.getElementById('list');
+            const childLists = `<li id="${Order._id}">${Order.Candy_name}, ${Order.Description}, ${Order.Prise}, ${Order.Quantity}
+                <button class="m-1 btn btn-dark" onclick=buyOne('${Order._id}','${Order.Candy_name}','${Order.Description}','${Order.Prise}','${Order.Quantity - 1}')>Buy 1</button>
+                <button class="m-1 btn btn-dark" onclick=buyTwo('${Order._id}','${Order.Candy_name}','${Order.Description}','${Order.Prise}','${Order.Quantity - 2}')>Buy 2</button>
+                <button class="m-1 btn btn-dark" onclick=buyThree('${Order._id}','${Order.Candy_name}','${Order.Description}','${Order.Prise}','${Order.Quantity}')>Buy 3</button>
+                </li>`;
+            parentList.innerHTML = parentList.innerHTML + childLists;
+        }
+
+        function removescreen(Order) {
+            const parentList1 = document.getElementById('list');
+            const childLists1 = document.getElementById(`${Order._id}`);
+            parentList1.removeChild(childLists1);
+        }
+
+
+        //Buy 1 function
+        function buyOne(orderId, Candy_name, Description, Prise, Quantity) {
+            // Candy_Name, Description, Prise, Quantity
+            let Candy_name1 = document.getElementById('Candy_Name').value = Candy_name;
+            let Description1 = document.getElementById('Description').value = Description;
+            let Prise1 = document.getElementById('Prise').value = Prise;
+            let Quantity1 = document.getElementById('Quantity').value = Quantity;
+            console.log("one", 'Candy_name1', Quantity1)
+            const Order1 = { Candy_name, Description, Prise, Quantity }
+
+            axios.put(`https://crudcrud.com/api/e16bed95401c43c9a3136c1736acc89a/CandysOrderData/${orderId}`,
+                { Candy_name: Candy_name, Description: Description, Prise: Prise, Quantity: Quantity })
+                .then((response) => {
+                    // removescreen(Order1)
+                    showOrderDataOnScreen(Order1)
+                    if (Quantity < 0) {
+                        document.body.innerHTML = document.body.innerHTML + `<h3> Something went wrong in quantity....!`;
+                    }
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+        //Buy 2 function
+        function buyTwo(orderId, Candy_name, Description, Prise, Quantity) {
+            // Candy_Name, Description, Prise, Quantity
+            document.getElementById('Candy_Name').value = Candy_name;
+            document.getElementById('Description').value = Description;
+            document.getElementById('Prise').value = Prise;
+            document.getElementById('Quantity').value = Quantity;
+            console.log("Two", 'Candy_name1')
+            const Order2 = { Candy_name, Description, Prise, Quantity }
+
+            axios.put(`https://crudcrud.com/api/e16bed95401c43c9a3136c1736acc89a/CandysOrderData/${orderId}`,
+                { Candy_name: Candy_name, Description: Description, Prise: Prise, Quantity: Quantity })
+                .then((response) => {
+                    // removescreen(Order2)
+                    showOrderDataOnScreen(Order2)
+                    if (Quantity < 0) {
+                        document.body.innerHTML = document.body.innerHTML + `<h3> Something went wrong in quantity....!`;
+                    }
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+        //Buy 3 function
+        function buyThree(orderId, Candy_name, Description, Prise, Quantity) {
+            // Candy_Name, Description, Prise, Quantity
+            let Candy_name1 = document.getElementById('Candy_Name').value = Candy_name;
+            let Description1 = document.getElementById('Description').value = Description;
+            let Prise1 = document.getElementById('Prise').value = Prise;
+            let Quantity1 = document.getElementById('Quantity').value = Quantity - 3;
+            console.log("Three", 'Candy_name1')
+            const Order3 = { Candy_name, Description, Prise, Quantity1 }
+
+            axios.put(`https://crudcrud.com/api/e16bed95401c43c9a3136c1736acc89a/CandysOrderData/${orderId}`,
+                { Candy_name: Candy_name, Description: Description, Prise: Prise, Quantity: Quantity1 })
+                .then((response) => {
+                    // removescreen(Order3)
+                    showOrderDataOnScreen(Order3);
+                    if (Quantity < 0) {
+                        document.body.innerHTML = document.body.innerHTML + `<h3> Something went wrong in quantity....!`;
+                    }
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+        //window load function
+        window.addEventListener('load', () => {
+            axios.get("https://crudcrud.com/api/e16bed95401c43c9a3136c1736acc89a/CandysOrderData")
+                .then((response) => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        showOrderDataOnScreen(response.data[i])
+                    }
+                    //console.log(response);
+                })
+                .catch((error) => {
+                    document.body.innerHTML = document.body.innerHTML + `<h3> Something went wrong getting data.....!`;
+                    console.log(error);
+                })
+        })
+    </script>
+</body>
+
+</html>
